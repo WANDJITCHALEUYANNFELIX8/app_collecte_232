@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Mon résultat — EduStat{% endblock %}
+
+{% block content %}
+<h1>👤 Ton résultat personnel</h1>
+<p class="page-subtitle">Basé sur les données que tu viens de soumettre</p>
+
+<div class="two-cols-grid">
+
+  <div class="card text-center border-teal">
+    <p class="card-label">Classe prédite par le modèle ML</p>
+    <div class="big-icon">🎓</div>
+    {% set c = classe_predite | lower %}
+    {% if 'faible' in c %}
+      <span class="badge badge-faible badge-lg">Faible</span>
+    {% elif 'moyen' in c %}
+      <span class="badge badge-moyen badge-lg">Moyen</span>
+    {% elif 'bon' in c %}
+      <span class="badge badge-bon badge-lg">Bon</span>
+    {% elif 'excellent' in c %}
+      <span class="badge badge-excellent badge-lg">Excellent</span>
+    {% else %}
+      <span class="badge badge-neutral">{{ classe_predite }}</span>
+    {% endif %}
+  </div>
+
+  <div class="card border-blue">
+    <p class="card-label">Ta moyenne vs moyenne générale</p>
+    <div class="compare-header">
+      <span class="compare-title">Ta moyenne</span>
+      <span class="compare-value">{{ student.moyenne }} / 20</span>
+    </div>
+    <div class="compare-bar">
+      <div class="compare-fill" style="width:{{ ((student.moyenne | float) / 20 * 100) | round }}%"></div>
+    </div>
+    <div class="compare-labels">
+      <span>0</span>
+      <span>Moy. promo : {{ moyenne_generale }}</span>
+      <span>20</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+  <h2>📄 Ton profil complet</h2>
+  <div class="two-cols">
+    <table class="info-table">
+      <tr><td>Âge</td><td>{{ student.age }} ans</td></tr>
+      <tr><td>Sexe</td><td>{{ student.sexe }}</td></tr>
+      <tr><td>Niveau</td><td>{{ student.niveau }}</td></tr>
+      <tr><td>Temps d'étude</td><td>{{ student.etude }} h/jour</td></tr>
+      <tr><td>Heures de sommeil</td><td>{{ student.sommeil }} h/nuit</td></tr>
+      <tr><td>Distraction</td><td>{{ student.distraction }} / 10</td></tr>
+    </table>
+    <table class="info-table">
+      <tr><td>Environnement</td><td>{{ student.env }} / 5</td></tr>
+      <tr><td>Assiduité</td><td>{{ student.assiduite }} / 10</td></tr>
+      <tr><td>Ponctualité</td><td>{{ student.ponctualite }} / 10</td></tr>
+      <tr><td>Discipline</td><td>{{ student.discipline }} / 10</td></tr>
+      <tr><td>Tâches effectuées</td><td>{{ student.tache }} / 10</td></tr>
+      <tr><td>Moyenne générale</td><td><strong>{{ student.moyenne }} / 20</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="result-nav">
+  <a href="/formulaire" class="btn-secondary">← Nouveau formulaire</a>
+  <a href="/generale" class="btn-primary">Voir l'analyse générale →</a>
+</div>
+{% endblock %}

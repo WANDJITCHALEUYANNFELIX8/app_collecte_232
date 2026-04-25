@@ -1,122 +1,29 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-	<title> 
-		FORMULAIRE DE COLLECTE DE DONNEES EN LIGNE
-	</title>
-</head>
+{% extends "base.html" %}
+{% block title %}Accueil — EduStat{% endblock %}
 
-<body>
-	<h1> ANALYSE STATISTIQUE DES PERFORMANCES DES ETUDIANTS </h1>
-	
-	<form action="/submit" method="POST">
-		<input type="text" name="_gotcha" style="display:none">
-		<section>
-			<h2> Informations personnelles</h2>
-			
-			<label for="age">Age :</label>
-			<input type="number" id="age" name="age" placeholder="Votre Age" min="14" max="35" required><br>
-		
-			<label>Sexe :</label>
-			<select name="sexe">
-				<option value="H">Homme</option>
-				<option value="F">Femme</option>
-			<select><br>	
-		</section>
-		
-		<section>
-			<h2> Habitudes de travail </h2>
-			
-			<label for="sommeil">Sommeil :</label>
-			<input type="number" id="sommeil" name="sommeil" placeholder="Temps de sommeil par jour" min="2" max="12" required><br>
-			
-			<label for="etude">Temps d'etude :</label>
-			<input type="number" id="etude" name="etude" min="0" max="12" placeholder="Entrez votre temps d'étude par jour" required><br>
-			
-			<label> Temps de réalisation des taches :</label>
-			<p>Le temps réalisation des taches correspond à la vitesse pour faire les devoirs, les exercices, les TD, les TP, ... </p> 
-				<input type="radio" id="tache1" name="tache" value="1">
-				<label for="tache1">1 - lent</label><br> 
-				<input type="radio" id="tache2" name="tache" value="2">
-				<label for="tache2">2 - Normal</label><br>
-				<input type="radio" id="tache3" name="tache" value="3">
-				<label for="tache3">3 - Rapide</label><br>
-			</p>
-			
-		</section>
-		
-		<section>
-			<h2> Comportement académique </h2>
-			
-			<h4>Discipline :</h4>
-			<p> La discipline correspond à votre comportement en classe et votre respect des règles</p>
+{% block content %}
+<div class="hero">
+  <h1>Analyse des <span>performances</span><br>étudiantes</h1>
+  <p>Plateforme d'analyse basée sur le machine learning pour comprendre les habitudes et prédire les résultats académiques.</p>
+  <span class="hero-badge">{{ nb_etudiants }} étudiant{{ 's' if nb_etudiants != 1 else '' }} en base</span>
+  <div class="hero-buttons">
+    <a href="/formulaire" class="btn-primary">Remplir le formulaire</a>
+    <a href="/generale" class="btn-secondary">Voir l'analyse générale</a>
+  </div>
+</div>
 
-				<input type="radio" id="disc1" name="discipline" value="1">
-				<label for="disc1">1 - Faible (indiscipliné)</label><br> 
-				<input type="radio" id="disc2" name="discipline" value="2">
-				<label for="disc2">2 - Moyen</label><br>
-				<input type="radio" id="disc3" name="discipline" value="3">
-				<label for="disc3">3 - Elevé (discipliné)</label><br>
-			</p>
-			
-			<h4>Assiduité : </h4>
-			<p> L'assiduité correspond à votre présence régulière aux cours</p>
-				<input type="radio" id="ass1" name="assiduite" value="1">
-				<label for="ass1">1 - Faible (absences fréquentes)</label><br> 
-				<input type="radio" id="ass2" name="assiduite" value="2">
-				<label for="ass2">2 - Moyenne</label><br>
-				<input type="radio" id="ass3" name="assiduite" value="3">
-				<label for="ass3">3 - Elevé (toujours présent)</label><br>
-			</p>
-			<h4>Ponctualité : </h4>
-			<p> La ponctualité correspond à votre présence sans etre en retard</p>
-				<input type="radio" id="pon1" name="ponctualite" value="1">
-				<label for="pon1">1 - Faible (retard fréquent)</label><br> 
-				<input type="radio" id="pon2" name="ponctualite" value="2">
-				<label for="pon2">2 - Moyenne</label><br>
-				<input type="radio" id="pon3" name="ponctualite" value="3">
-				<label for="pon3">3 - Elevé (toujours présent à temps)</label><br>	
-			</p>		
-		</section>
-		
-		<section>
-			<h2> Environnement </h2>
-			
-			<label>Environnement familial :</label>
-			<p> L'assiduité correspond à votre présence régulière aux cours</p>
-				<input type="radio" id="env1" name="environnement" value="1">
-				<label for="env1">1 - défavorable</label><br> 
-				<input type="radio" id="env2" name="environnement" value="2">
-				<label for="env2">2 - Moyen</label><br>
-				<input type="radio" id="env3" name="environnement" value="3">
-				<label for="env3">3 - favorable </label><br>
-			</p>
-			
-			<label for="distraction">Distraction :</label>
-			<input type="number" id="distraction" name="distraction" placeholder="Temps de distraction par jour" min="1" max="10" required><br>
-			
-		</section>
-		
-		<section>
-			<h2> Performance </h2>
-			<label for="moyenne">Moyenne :</label>
-			<input type="number" id="moyenne" name="moyenne" placeholder="Votre Moyenne" min="0" max="20" required><br>
-		
-			<label>Niveau :</label>
-			<select name="niveau">
-				<option value="L1">Licence 1</option>
-				<option value="L2">Licence 2</option>
-				<option value="L3">Licence 3</option>
-				<option value="M1">Master 1</option>
-				<option value="M2">Master 2</option>
-			<select><br>	
-			
-		</section>
-
-		<br><button type="submit" class="btn">Envoyer</button>
-	
-	</form>	
-</body>	
-
-
-</html>	
+<div class="features-grid">
+  <div class="card feature-card">
+    <h2>📋 Formulaire</h2>
+    <p>Saisis tes données personnelles : temps d'étude, sommeil, discipline, assiduité… Le système enregistre ton profil.</p>
+  </div>
+  <div class="card feature-card">
+    <h2>👤 Résultat individuel</h2>
+    <p>Après soumission, tu vois immédiatement ta classe prédite par le modèle ML et ta comparaison avec la moyenne générale.</p>
+  </div>
+  <div class="card feature-card">
+    <h2>📊 Analyse générale</h2>
+    <p>Vue globale de toute la promotion : statistiques, graphiques, clustering et répartition par classe.</p>
+  </div>
+</div>
+{% endblock %}

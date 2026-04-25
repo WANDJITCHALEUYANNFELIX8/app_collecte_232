@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EduStat{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">Edu<span>Stat</span></div>
+    <div class="nav-links">
+      <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Accueil</a>
+      <a href="/formulaire" {% if request.path == '/formulaire' %}class="active"{% endif %}>Formulaire</a>
+      <a href="/generale" {% if request.path == '/generale' %}class="active"{% endif %}>Analyse générale</a>
+    </div>
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

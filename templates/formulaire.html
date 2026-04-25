@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Formulaire — EduStat{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:800px; margin-inline:auto;">
+  <h2>📋 Saisie des données étudiant</h2>
+  <p>Remplis tous les champs. Après soumission, tu verras ton résultat personnalisé immédiatement.</p>
+
+  <form action="/submit" method="POST">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Âge</label>
+        <input type="number" name="age" min="15" max="40" placeholder="Ex: 20" required>
+      </div>
+      <div class="form-group">
+        <label>Sexe</label>
+        <select name="sexe" required>
+          <option value="">-- Choisir --</option>
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Temps d'étude par jour (heures)</label>
+        <input type="number" name="etude" min="0" max="24" step="0.5" placeholder="Ex: 3.5" required>
+      </div>
+      <div class="form-group">
+        <label>Heures de sommeil par nuit</label>
+        <input type="number" name="sommeil" min="0" max="12" step="0.5" placeholder="Ex: 7" required>
+      </div>
+      <div class="form-group">
+        <label>Niveau de distraction (0–10)</label>
+        <input type="number" name="distraction" min="0" max="10" placeholder="Ex: 4" required>
+      </div>
+      <div class="form-group">
+        <label>Qualité de l'environnement (1–5)</label>
+        <input type="number" name="env" min="1" max="5" placeholder="Ex: 3" required>
+      </div>
+      <div class="form-group">
+        <label>Assiduité (0–10)</label>
+        <input type="number" name="assiduite" min="0" max="10" placeholder="Ex: 8" required>
+      </div>
+      <div class="form-group">
+        <label>Ponctualité (0–10)</label>
+        <input type="number" name="ponctualite" min="0" max="10" placeholder="Ex: 7" required>
+      </div>
+      <div class="form-group">
+        <label>Discipline (0–10)</label>
+        <input type="number" name="discipline" min="0" max="10" placeholder="Ex: 6" required>
+      </div> 
+      <div class="form-group">
+        <label>Tâches effectuées (0–10)</label>
+        <input type="number" name="tache" min="0" max="10" placeholder="Ex: 7" required>
+      </div>
+      <div class="form-group">
+        <label>Niveau d'études</label>
+        <select name="niveau" required>
+          <option value="">-- Choisir --</option>
+          <option value="L1">Licence 1</option>
+          <option value="L2">Licence 2</option>
+          <option value="L3">Licence 3</option>
+          <option value="M1">Master 1</option>
+          <option value="M2">Master 2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Moyenne générale (/20)</label>
+        <input type="number" name="moyenne" min="0" max="20" step="0.5" placeholder="Ex: 13.5" required>
+      </div>
+    </div>
+    <button type="submit" class="btn-submit">Soumettre et voir mon résultat →</button>
+  </form>
+</div>
+{% endblock %}

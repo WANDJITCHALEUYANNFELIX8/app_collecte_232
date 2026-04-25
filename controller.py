@@ -14,7 +14,7 @@ def process_student(form_data):
         assiduite=form_data["assiduite"],
         ponctualite=form_data["ponctualite"],
         discipline=form_data["discipline"],
-        taches=form_data["tache"],
+        tache=form_data["tache"],
         niveau=form_data["niveau"],
         moyenne=form_data["moyenne"]
     )

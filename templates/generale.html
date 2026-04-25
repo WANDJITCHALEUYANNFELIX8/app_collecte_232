@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Analyse générale — EduStat{% endblock %}
+
+{% block content %}
+<h1>Analyse générale</h1>
+<p class="page-subtitle">Vue d'ensemble de toute la promotion</p>
+
+{% if vide %}
+  <div class="card empty">
+    <div class="icon">📭</div>
+    <h2>Aucune donnée disponible</h2>
+    <p>Commence par remplir le formulaire pour alimenter la base.</p>
+    <a href="/formulaire" class="btn-primary">Aller au formulaire</a>
+  </div>
+
+{% else %}
+
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="val">{{ stats.nb }}</div>
+      <div class="lbl">Étudiants</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">{{ stats.moy_gen }}</div>
+      <div class="lbl">Moyenne générale</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">{{ stats.moy_min }}</div>
+      <div class="lbl">Moyenne minimale</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">{{ stats.moy_max }}</div>
+      <div class="lbl">Moyenne maximale</div>
+    </div>
+  </div>
+
+  <div class="two-cols-grid">
+    <div class="card">
+      <h2>Moyenne par sexe</h2>
+      {% for sexe, moy in stats.par_sexe.items() %}
+      <div class="bar-row">
+        <span class="bar-label">{{ sexe }}</span>
+        <div class="bar-wrap">
+          <div class="compare-bar">
+            <div class="compare-fill" style="width:{{ (moy/20*100)|round }}%"></div>
+          </div>
+        </div>
+        <span class="bar-value">{{ moy }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      <h2>Répartition des classes</h2>
+      {% for classe, nb in stats.repartition.items() %}
+      <div class="repartition-row">
+        {% if classe == 'faible' %}
+          <span class="badge badge-faible">{{ classe }}</span>
+        {% elif classe == 'moyen' %}
+          <span class="badge badge-moyen">{{ classe }}</span>
+        {% elif classe == 'bon' %}
+          <span class="badge badge-bon">{{ classe }}</span>
+        {% elif classe == 'excellent' %}
+          <span class="badge badge-excellent">{{ classe }}</span>
+        {% endif %}
+        <span class="repartition-count">{{ nb }} étudiant{{ 's' if nb > 1 else '' }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="graphs-grid">
+    {% if img_hist %}
+    <div class="graph-box">
+      <h3>Distribution des moyennes</h3>
+      <img src="data:image/png;base64,{{ img_hist }}" alt="Histogramme des moyennes">
+    </div>
+    {% endif %}
+    {% if img_scatter %}
+    <div class="graph-box">
+      <h3>Étude vs Performance</h3>
+      <img src="data:image/png;base64,{{ img_scatter }}" alt="Scatter étude vs moyenne">
+    </div>
+    {% endif %}
+    {% if img_classes %}
+    <div class="graph-box">
+      <h3>Répartition par classe</h3>
+      <img src="data:image/png;base64,{{ img_classes }}" alt="Répartition des classes">
+    </div>
+    {% endif %}
+    {% if img_cluster %}
+    <div class="graph-box">
+      <h3>Clustering des profils étudiants</h3>
+      <img src="data:image/png;base64,{{ img_cluster }}" alt="Clustering K-Means">
+    </div>
+    {% endif %}
+  </div>
+
+{% endif %}
+{% endblock %}
