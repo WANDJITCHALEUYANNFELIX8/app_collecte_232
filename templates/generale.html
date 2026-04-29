@@ -32,6 +32,14 @@
       <div class="val">{{ stats.moy_max }}</div>
       <div class="lbl">Moyenne maximale</div>
     </div>
+    <div class="stat-box">
+      <div class="val">{{ MSE }}</div>
+      <div class="lbl">MSE <br>(erreur quadratique moyenne).</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">{{ R2 }}</div>
+      <div class="lbl">R² <br> évalue la capacité du modèle à expliquer les données</div>
+    </div>
   </div>
 
   <div class="two-cols-grid">
@@ -40,6 +48,21 @@
       {% for sexe, moy in stats.par_sexe.items() %}
       <div class="bar-row">
         <span class="bar-label">{{ sexe }}</span>
+        <div class="bar-wrap">
+          <div class="compare-bar">
+            <div class="compare-fill" style="width:{{ (moy/20*100)|round }}%"></div>
+          </div>
+        </div>
+        <span class="bar-value">{{ moy }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <div class="card">
+      <h2>Moyenne par niveau</h2>
+      {% for niveau, moy in stats.par_niveau.items() %}
+      <div class="bar-row">
+        <span class="bar-label">{{ niveau }}</span>
         <div class="bar-wrap">
           <div class="compare-bar">
             <div class="compare-fill" style="width:{{ (moy/20*100)|round }}%"></div>
@@ -74,24 +97,52 @@
     <div class="graph-box">
       <h3>Distribution des moyennes</h3>
       <img src="data:image/png;base64,{{ img_hist }}" alt="Histogramme des moyennes">
+      <p><br>Cet histogramme représente la distribution des moyennes des étudiants. Il permet d’observer la concentration des performances académiques et d’identifier les tendances générales.
+      </p>
     </div>
     {% endif %}
     {% if img_scatter %}
     <div class="graph-box">
       <h3>Étude vs Performance</h3>
       <img src="data:image/png;base64,{{ img_scatter }}" alt="Scatter étude vs moyenne">
+      <p><br>Ce graphique montre la relation entre le temps d’étude quotidien et la moyenne obtenue. Chaque point représente un étudiant.</p>
+    </div>
+    {% endif %}
+    {% if img_regression %}
+    <div class="graph-box">
+      <h3>Droite de regression</h3>
+      <img src="data:image/png;base64,{{ img_regression }}" alt="Scatter Droite de regression">
+      <p><br>La droite de régression représente la tendance générale entre le temps d’étude et la moyenne. Elle modélise la relation de manière simplifiée.</p>
+    </div>
+    {% endif %}
+     {% if img_importance %}
+    <div class="graph-box">
+      <h3>Graphe d'importance des paramètres</h3>
+      <img src="data:image/png;base64,{{ img_importance }}" alt="Scatter Graphe d'importance">
+      <p><br></p>
+    </div>
+    {% endif %}
+     {% if img_pca %}
+    <div class="graph-box">
+      <h3>PCA</h3>
+      <img src="data:image/png;base64,{{ img_pca }}" alt="Scatter Graphique PCA">
+      <p><br>Le PCA permet de réduire un espace de n dimensions en un espace de 2 dimensions</p>
     </div>
     {% endif %}
     {% if img_classes %}
     <div class="graph-box">
       <h3>Répartition par classe</h3>
       <img src="data:image/png;base64,{{ img_classes }}" alt="Répartition des classes">
+      <p><br>Ce graphique présente la répartition des étudiants selon leur niveau de performance (faible, moyen, bon, excellent).
+      </p>
     </div>
     {% endif %}
     {% if img_cluster %}
     <div class="graph-box">
       <h3>Clustering des profils étudiants</h3>
       <img src="data:image/png;base64,{{ img_cluster }}" alt="Clustering K-Means">
+      <p><br>Le clustering regroupe automatiquement les étudiants en fonction de leurs caractéristiques (étude, sommeil, distraction), sans connaître leur niveau réel.
+    </p>
     </div>
     {% endif %}
   </div>

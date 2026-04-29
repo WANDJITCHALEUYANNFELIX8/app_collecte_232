@@ -4,6 +4,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, confusion_matrix
 from sklearn.cluster import KMeans 
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import sqlite3
@@ -67,10 +68,7 @@ def relation_etude_moyenne(data):
 # RÉGRESSION
 # ─────────────────────────────────────────────
 
-def erreur_et_qualite(y_test, y_pred):
-    mse = mean_squared_error(y_test, y_pred)
-    r2  = r2_score(y_test, y_pred)
-    return mse, r2
+
 
 def regression_simple_etude_moyenne(data):
     x = data[["etude"]]
@@ -106,6 +104,62 @@ def regression_graphique(model, data):
     ax.set_title("Régression : Etude vs Performance")
     ax.legend()
     ax.grid()
+    return fig    
+
+
+def erreur_et_qualite(y_test, y_pred):
+    mse = mean_squared_error(y_test, y_pred)
+    r2  = r2_score(y_test, y_pred)
+    return mse, r2
+
+ 
+def regression_multiple(data):
+    # Variables explicatives
+    X = data[[
+        "etude",
+        "sommeil",
+        "distraction",
+        "assiduite",
+        "ponctualite",
+        "discipline",
+        "tache"
+    ]]
+
+    # Variable cible
+    y = data["moyenne"]
+
+    # séparation train / test
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    # modèle
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    # prédiction
+    y_pred = model.predict(X_test)
+
+    # métriques
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+
+    # importance des variables
+    coefficients = dict(zip(X.columns, model.coef_))
+
+    return model, X_test, y_test, y_pred, mse, r2, coefficients
+    
+
+    
+def plot_importance(coefficients):
+    fig, ax = plt.subplots()
+
+    ax.bar(coefficients.keys(), coefficients.values())
+    ax.set_title("Importance des facteurs")
+    ax.set_ylabel("Poids")
+
+    plt.xticks(rotation=45)
+
     return fig
 
 # ─────────────────────────────────────────────
@@ -154,10 +208,8 @@ def classification_modele(data):
     acc = accuracy_score(y_test, y_pred)
     cm  = confusion_matrix(y_test, y_pred)
 
-    print("Accuracy            :", round(acc, 2))
-    print("Matrice de confusion :\n", cm)
 
-    return model, X_test, y_test, y_pred, cm
+    return model, X_test, y_test, y_pred, cm, acc
 
 def afficher_matrice_confusion(cm, labels):
     fig, ax = plt.subplots()
@@ -209,6 +261,48 @@ def plot_clusters(data):
     ax.set_ylabel("Heures de sommeil")
     ax.grid(True, alpha=0.3)
     return fig
+    
+#-----------------------PCA-----------------------------
+
+def appliquer_pca(data):
+    features = [
+        "etude",
+        "sommeil",
+        "distraction",
+        "assiduite",
+        "ponctualite",
+        "discipline",
+        "tache"
+    ]
+
+    X = data[features]
+
+    # normalisation (OBLIGATOIRE pour PCA)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # PCA
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X_scaled)
+
+    # ajout dans dataframe
+    data["PC1"] = X_pca[:, 0]
+    data["PC2"] = X_pca[:, 1]
+
+    return data, pca
+
+def plot_pca(data):
+    fig, ax = plt.subplots()
+
+    ax.scatter(data["PC1"], data["PC2"], alpha=0.7)
+
+    ax.set_title("Projection PCA")
+    ax.set_xlabel("Composante principale 1")
+    ax.set_ylabel("Composante principale 2")
+
+    ax.grid()
+
+    return fig
 
 # ─────────────────────────────────────────────
 # MAIN
@@ -238,21 +332,31 @@ if __name__ == "__main__":
     fig2 = relation_etude_moyenne(data)
     plt.show()
 
-    model_reg, x_test, y_test_reg, y_pred_reg = regression_simple_etude_moyenne(data)
+    model_reg, x_test, y_test_, y_pred_r = regression_simple_etude_moyenne(data)
 
-    fig3 = regression_graphique(model_reg, data)
+    fig5=regression_graphique(model_reg, data)
+    plt.show()
+    
+    model, X_test, y_test_reg, y_pred_reg, mse, r2, coefficients=regression_multiple(data)
+    
+    fig3= plot_importance(coefficients)
     plt.show()
 
-    mse, r2 = erreur_et_qualite(y_test_reg, y_pred_reg)
+    data1,pca=appliquer_pca(data)
+    
+    fig4=plot_pca(data)
+    plt.show()
+
     print("MSE :", round(mse, 2))
     print("R2  :", round(r2, 2))
+    
 
     # Classification
     data = ajouter_classe(data)
     print(data[["moyenne", "classe"]].head())
     print(data["classe"].value_counts())
 
-    model_clf, X_test, y_test_clf, y_pred_clf, cm = classification_modele(data)
+    model_clf, X_test, y_test_clf, y_pred_clf, cm,acc = classification_modele(data)
 
     labels = ["faible", "moyen", "bon", "excellent"]
     fig_cm = afficher_matrice_confusion(cm, labels)
@@ -262,3 +366,17 @@ if __name__ == "__main__":
     data, model_k = clustering_etudiants(data)
     fig_cluster = plot_clusters(data)
     plt.show()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
